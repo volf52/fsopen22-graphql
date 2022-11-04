@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client"
 
-const query = gql`
+const ALL_AUTHORS = gql`
   query {
     allAuthors {
       name
@@ -11,7 +11,7 @@ const query = gql`
 `
 
 const Authors = (props) => {
-  const { data, loading } = useQuery(query)
+  const { data, loading } = useQuery(ALL_AUTHORS)
 
   if (!props.show) {
     return null
