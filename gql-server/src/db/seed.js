@@ -2,8 +2,8 @@ const { default: mongoose } = require("mongoose")
 const { connectDb } = require(".")
 const { authors } = require("./seedData")
 
-const Author = require("../model/author")
-const Book = require("../model/book")
+const Author = require("../models/author")
+const Book = require("../models/book")
 
 connectDb().then(async () => {
   console.log("Connected to mongo")

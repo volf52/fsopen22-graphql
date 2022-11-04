@@ -1,4 +1,4 @@
-const Author = require("../model/author")
+const Author = require("../models/author")
 
 const getAll = async () => {
   return await Author.find({})

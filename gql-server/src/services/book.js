@@ -1,4 +1,4 @@
-const Book = require("../model/book")
+const Book = require("../models/book")
 
 const getAll = async () => {
   return await Book.find({}).populate("author")

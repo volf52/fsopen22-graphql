@@ -19,7 +19,7 @@ const authorSchema = new Schema({
 })
 
 authorSchema.set("toJSON", {
-  transform: function (doc, returned) {
+  transform: function (_doc, returned) {
     returned.id = returned._id
 
     delete returned._id

@@ -17,4 +17,13 @@ const bookSchema = new Schema({
   genres: [{ type: String }],
 })
 
+bookSchema.set("toJSON", {
+  transform: function (_doc, returned) {
+    returned.id = returned._id
+
+    delete returned._id
+    delete returned.__v
+  },
+})
+
 module.exports = model("Book", bookSchema, "books")
