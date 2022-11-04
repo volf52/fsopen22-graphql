@@ -6,6 +6,7 @@
   "author": "Arslan <rslnkrmt2552@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@napi-rs/uuid": "^0.2.2",
     "apollo-server": "^3.11.1",
     "graphql": "^16.6.0"
   }
