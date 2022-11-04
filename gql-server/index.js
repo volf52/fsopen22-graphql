@@ -1,5 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server")
-const { v4: newId } = require("@napi-rs/uuid")
+const { ApolloServer, gql, UserInputError } = require("apollo-server")
 const { connectDb } = require("./src/db")
 
 const authorService = require("./src/services/author")
@@ -74,9 +73,18 @@ const resolvers = {
         book.author = a._id
       }
 
-      const added = await bookService.create(book)
+      try {
+        const added = await bookService.create(book)
+        return added
+      } catch (err) {
+        if (err.name === "ValidationError") {
+          console.error("Validation Error")
+        } else {
+          console.error(err)
+        }
 
-      return added
+        throw new UserInputError(err.message, { invalidArgs: args })
+      }
     },
 
     editAuthor: async (_root, args) => {
