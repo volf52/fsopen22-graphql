@@ -43,23 +43,26 @@ const resolvers = {
   Query: {
     bookCount: () => bookService.getCount(),
     authorCount: () => authorService.getCount(),
+    allAuthors: () => authorService.getAll(),
     allBooks: async (_root, args) => {
-      let books = await bookService.getAll()
+      const filters = {}
 
       if (args.author !== undefined) {
-        books = books.filter((b) => b.author === args.author)
+        const author = await authorService.getByName(args.author)
+        filters.author = author._id
       }
 
       if (args.genre !== undefined) {
-        books = books.filter((b) => b.genres.includes(args.genre))
+        filters.genre = args.genre
       }
+
+      let books = await bookService.getFiltered(filters)
 
       return books
     },
-    allAuthors: () => authorService.getAll(),
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (_root, args) => {
       const book = { ...args }
 
       const a = await authorService.getByName(args.author)
@@ -76,18 +79,19 @@ const resolvers = {
       return added
     },
 
-    editAuthor: (_root, args) => {
-      const author = authors.find((a) => a.name === args.name)
+    editAuthor: async (_root, args) => {
+      const author = await authorService.getByName(args.name)
 
-      if (author) {
-        author.born = args.setBornTo
-      }
+      if (!author) return null
 
-      return author
+      author.born = args.setBornTo
+      const updatedAuthor = await author.save()
+
+      return updatedAuthor
     },
   },
   Author: {
-    bookCount: (root) => books.filter((b) => b.author === root.name).length,
+    bookCount: (root) => root.books.length,
   },
 }
 

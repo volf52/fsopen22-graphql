@@ -12,13 +12,18 @@ connectDb().then(async () => {
   await Book.deleteMany({})
 
   for (const author of authors) {
-    const created = await Author.create(author)
+    const created = await Author.create({ ...author, books: [] })
 
     const authorBooks = author.books.map((book) => ({
       ...book,
       author: created._id,
     }))
-    await Book.insertMany(authorBooks)
+
+    const result = await Book.insertMany(authorBooks)
+
+    created.books = result.map((r) => r._id)
+
+    await created.save()
   }
 
   await mongoose.disconnect()

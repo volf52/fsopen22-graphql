@@ -10,11 +10,20 @@ const authorSchema = new Schema({
   born: {
     type: Number,
   },
+  books: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Book",
+    },
+  ],
 })
 
 authorSchema.set("toJSON", {
   transform: function (doc, returned) {
     returned.id = returned._id
+
+    delete returned._id
+    delete returned.__v
   },
 })
 
