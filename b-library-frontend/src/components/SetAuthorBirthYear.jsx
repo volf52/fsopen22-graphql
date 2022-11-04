@@ -2,9 +2,8 @@ import { useMutation } from "@apollo/client"
 import { useState } from "react"
 import { ALL_AUTHORS, SET_BIRTH_YEAR } from "../queries"
 
-const SetAuthorBirthYear = () => {
-  const [author, setAuthor] = useState("")
-  const [birthYear, setBirthYear] = useState("")
+const SetAuthorBirthYear = ({ onSuccess, author, onCancel }) => {
+  const [birthYear, setBirthYear] = useState(author.born)
 
   const [editAuthor] = useMutation(SET_BIRTH_YEAR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
@@ -13,15 +12,14 @@ const SetAuthorBirthYear = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    const variables = { name: author, birthYear: Number(birthYear) }
+    const variables = { name: author.name, birthYear: Number(birthYear) }
 
     editAuthor({ variables })
       .then((r) => {
-        console.log(r.data)
+        onSuccess(r.data.editAuthor)
       })
       .catch(console.error)
 
-    setAuthor("")
     setBirthYear("")
   }
 
@@ -35,8 +33,8 @@ const SetAuthorBirthYear = () => {
             id="author"
             aria-label="author"
             name="author"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+            value={author.name}
+            disabled
             required
           />
         </div>
@@ -55,6 +53,9 @@ const SetAuthorBirthYear = () => {
         </div>
 
         <div>
+          <button style={{ margin: "0.5em" }} onClick={() => onCancel()}>
+            Cancel
+          </button>
           <button type="submit">Submit</button>
         </div>
       </form>

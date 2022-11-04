@@ -1,8 +1,9 @@
+import { useState } from "react"
 import { useQuery } from "@apollo/client"
 import { ALL_AUTHORS } from "../queries"
 import SetAuthorBirthYear from "./SetAuthorBirthYear"
 
-const AuthorList = () => {
+const AuthorList = ({ onAuthorClick }) => {
   const { data, loading } = useQuery(ALL_AUTHORS)
 
   if (loading) return <div>loading authors...</div>
@@ -19,7 +20,7 @@ const AuthorList = () => {
             <th>books</th>
           </tr>
           {authors.map((a) => (
-            <tr key={a.name}>
+            <tr key={a.name} onClick={() => onAuthorClick(a)}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
@@ -32,14 +33,32 @@ const AuthorList = () => {
 }
 
 const Authors = (props) => {
+  const [selectedAuthor, setSelectedAuthor] = useState(null)
+
+  const onAuthorClick = (a) => {
+    setSelectedAuthor(a)
+  }
+
+  const onUpdateSuccess = () => {
+    setSelectedAuthor(null)
+  }
+
+  const onCancel = () => setSelectedAuthor(null)
+
   if (!props.show) {
     return null
   }
 
   return (
     <div>
-      <AuthorList />
-      <SetAuthorBirthYear />
+      <AuthorList onAuthorClick={onAuthorClick} />
+      {selectedAuthor && (
+        <SetAuthorBirthYear
+          author={selectedAuthor}
+          onSuccess={onUpdateSuccess}
+          onCancel={onCancel}
+        />
+      )}
     </div>
   )
 }
