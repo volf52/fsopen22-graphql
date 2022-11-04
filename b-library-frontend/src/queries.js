@@ -19,6 +19,7 @@ export const ALL_BOOKS = gql`
     }
   }
 `
+
 export const CREATE_BOOK = gql`
   mutation createBook(
     $title: String!
@@ -35,6 +36,16 @@ export const CREATE_BOOK = gql`
       id
       title
       author
+    }
+  }
+`
+
+export const SET_BIRTH_YEAR = gql`
+  mutation setBirthYear($name: String!, $birthYear: Int!) {
+    editAuthor(name: $name, setBornTo: $birthYear) {
+      name
+      id
+      born
     }
   }
 `

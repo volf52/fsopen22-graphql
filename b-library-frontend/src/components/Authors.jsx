@@ -1,14 +1,11 @@
 import { useQuery } from "@apollo/client"
 import { ALL_AUTHORS } from "../queries"
+import SetAuthorBirthYear from "./SetAuthorBirthYear"
 
-const Authors = (props) => {
+const AuthorList = () => {
   const { data, loading } = useQuery(ALL_AUTHORS)
 
-  if (!props.show) {
-    return null
-  }
-
-  if (loading) return <div>loading...</div>
+  if (loading) return <div>loading authors...</div>
   const authors = data.allAuthors
 
   return (
@@ -30,6 +27,19 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+    </div>
+  )
+}
+
+const Authors = (props) => {
+  if (!props.show) {
+    return null
+  }
+
+  return (
+    <div>
+      <AuthorList />
+      <SetAuthorBirthYear />
     </div>
   )
 }
