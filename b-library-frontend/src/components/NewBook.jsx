@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from "../queries";
+import {
+  CREATE_BOOK,
+  ALL_BOOKS,
+  ALL_AUTHORS,
+  BOOKS_BY_GENRE,
+} from "../queries";
 
 const DEFAULT_PUBLISHED = 2000;
 
@@ -23,6 +28,17 @@ const NewBook = (props) => {
         return {
           allBooks: allBooks.concat(book),
         };
+      });
+
+      book.genres.forEach((genre) => {
+        cache.updateQuery(
+          { query: BOOKS_BY_GENRE, variables: { genre } },
+          ({ allBooks }) => {
+            return {
+              allBooks: allBooks.concat(book),
+            };
+          }
+        );
       });
 
       cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {

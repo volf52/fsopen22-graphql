@@ -27,12 +27,25 @@ const getAuthorBookCount = async (authorId) => {
 };
 
 const create = async (book) => {
-  const b = new Book(book);
+  const newBook = new Book(book);
 
-  await b.save();
-  await b.populate("author");
+  await newBook.save();
+  await newBook.populate("author");
 
-  return b;
+  return newBook;
+};
+
+const getAllGenres = async () => {
+  const books = await Book.find({}, { genres: true });
+  const genres = books.reduce((genres, book) => {
+    genres.push(...book.genres);
+
+    return genres;
+  }, []);
+
+  const uniqueGenres = Array.from(new Set(genres));
+
+  return uniqueGenres;
 };
 
 const bookService = {
@@ -41,6 +54,7 @@ const bookService = {
   create,
   getFiltered,
   getAuthorBookCount,
+  getAllGenres,
 };
 
 module.exports = bookService;

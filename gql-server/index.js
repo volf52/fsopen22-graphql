@@ -42,6 +42,7 @@ const typeDefs = gql`
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
     me: User
+    genres: [String!]!
   }
 
   type Mutation {
@@ -63,6 +64,11 @@ const resolvers = {
     bookCount: () => bookService.getCount(),
     authorCount: () => authorService.getCount(),
     allAuthors: () => authorService.getAll(),
+    genres: async () => {
+      const genres = await bookService.getAllGenres()
+
+      return genres
+    },
     allBooks: async (_root, args) => {
       const filters = {}
 

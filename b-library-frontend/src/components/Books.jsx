@@ -1,44 +1,25 @@
 import { useQuery } from "@apollo/client";
 import { useState } from "react";
-import { useMemo } from "react";
-import { ALL_BOOKS } from "../queries";
-import BookList from "./BookList";
+import { ALL_GENRES } from "../queries";
+import FilteredBooks from "./FIlteredBooks";
 
 const genreButtonStyle = {
   margin: 2,
 };
 
 const Books = () => {
-  const { data, loading } = useQuery(ALL_BOOKS);
+  const { data, loading } = useQuery(ALL_GENRES);
   const [selectedGenre, setSelectedGenre] = useState("");
 
-  const books = data?.allBooks;
+  if (loading) return <div>loading genres...</div>;
 
-  const genres = useMemo(() => {
-    if (!books) return new Set();
-    const allGenres = books.reduce((acc, book) => {
-      acc.push(...book.genres);
-      return acc;
-    }, []);
-    const uniqueGenres = new Set(allGenres);
-
-    console.log(uniqueGenres);
-
-    return Array.from(uniqueGenres);
-  }, [books]);
-
-  if (loading) return <div>loading...</div>;
-
-  let filteredBooks = books;
-  if (selectedGenre) {
-    filteredBooks = books.filter((b) => b.genres.includes(selectedGenre));
-  }
+  const genres = data.genres;
 
   return (
     <div>
       <h2>books</h2>
 
-      <BookList books={filteredBooks} />
+      <FilteredBooks genre={selectedGenre} />
 
       <div>
         <h3>genres: </h3>
