@@ -1,0 +1,4 @@
+const USER_CREATED = "USER_CREATED";
+const BOOK_ADDED = "BOOK_ADDED";
+
+module.exports = { USER_CREATED, BOOK_ADDED };

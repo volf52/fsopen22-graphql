@@ -9,6 +9,7 @@ import { TOKEN_KEY } from "./constants";
 import Page from "./components/Page";
 import LoginForm from "./components/LoginForm";
 import RecommendedBooks from "./components/RecommendedBooks";
+import NewBookNotification from "./components/NewBookNotification";
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -38,6 +39,7 @@ const App = () => {
   return (
     <div>
       <Notify errorMessage={errorMsg} />
+      <NewBookNotification />
       <div>
         <button onClick={() => setPage("authors")}>authors</button>
         <button onClick={() => setPage("books")}>books</button>
