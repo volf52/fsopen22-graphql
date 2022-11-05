@@ -31,28 +31,32 @@ const LoginForm = ({ setToken, setError }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">Username:</label>
-        <input
-          name="username"
-          id="username"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          name="password"
-          id="password"
-          type="password"
-          value={password}
-          onChange={({ target }) => setPasswd(target.value)}
-        />
-      </div>
-      <button type="submit">Login</button>
-    </form>
+    <div>
+      <h2>Login</h2>
+
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="username">Username:</label>
+          <input
+            name="username"
+            id="username"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            name="password"
+            id="password"
+            type="password"
+            value={password}
+            onChange={({ target }) => setPasswd(target.value)}
+          />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
   );
 };
 

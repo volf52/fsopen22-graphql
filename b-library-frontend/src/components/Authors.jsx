@@ -45,10 +45,6 @@ const Authors = (props) => {
 
   const onCancel = () => setSelectedAuthor(null);
 
-  if (!props.show) {
-    return null;
-  }
-
   return (
     <div>
       <AuthorList onAuthorClick={onAuthorClick} />

@@ -2,11 +2,13 @@ import { useState } from "react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
-import LoginContainer from "./components/LoginContainer";
 import { useApolloClient } from "@apollo/client";
 import Notify from "./components/Notify";
 import { useEffect } from "react";
 import { TOKEN_KEY } from "./constants";
+import Page from "./components/Page";
+import LoginForm from "./components/LoginForm";
+import RecommendedBooks from "./components/RecommendedBooks";
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -42,6 +44,7 @@ const App = () => {
         {token ? (
           <>
             <button onClick={() => setPage("add")}>add book</button>
+            <button onClick={() => setPage("recommended")}>recommend</button>
             <button onClick={logout}>logout</button>
           </>
         ) : (
@@ -49,15 +52,23 @@ const App = () => {
         )}
       </div>
 
-      <Authors show={page === "authors"} />
-      <Books show={page === "books"} />
-      <NewBook show={page === "add"} setError={setErrorMsg} />
-      <LoginContainer
-        setToken={setToken}
-        setError={setErrorMsg}
-        show={page === "login"}
-      />
-      {}
+      <Page show={page === "authors"}>
+        <Authors />
+      </Page>
+      <Page show={page === "books"}>
+        <Books />
+      </Page>
+      <Page show={page === "add"}>
+        <NewBook setError={setErrorMsg} />
+      </Page>
+
+      <Page show={page === "login"}>
+        <LoginForm setToken={setToken} setError={setErrorMsg} />
+      </Page>
+
+      <Page show={page === "recommended"}>
+        <RecommendedBooks />
+      </Page>
     </div>
   );
 };

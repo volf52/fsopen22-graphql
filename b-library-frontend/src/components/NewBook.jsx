@@ -42,10 +42,6 @@ const NewBook = (props) => {
     },
   });
 
-  if (!props.show) {
-    return null;
-  }
-
   const submit = async (event) => {
     event.preventDefault();
 
@@ -64,7 +60,7 @@ const NewBook = (props) => {
   };
 
   return (
-    <div>
+    <div style={{ margin: "20px" }}>
       <form onSubmit={submit}>
         <div>
           title

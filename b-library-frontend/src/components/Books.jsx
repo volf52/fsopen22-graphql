@@ -1,58 +1,45 @@
-import { useQuery } from "@apollo/client"
-import { useState } from "react"
-import { useMemo } from "react"
-import { ALL_BOOKS } from "../queries"
+import { useQuery } from "@apollo/client";
+import { useState } from "react";
+import { useMemo } from "react";
+import { ALL_BOOKS } from "../queries";
+import BookList from "./BookList";
 
 const genreButtonStyle = {
   margin: 2,
-}
+};
 
-const BookList = () => {
-  const { data, loading } = useQuery(ALL_BOOKS)
-  const [selectedGenre, setSelectedGenre] = useState("")
+const Books = () => {
+  const { data, loading } = useQuery(ALL_BOOKS);
+  const [selectedGenre, setSelectedGenre] = useState("");
 
-  const books = data?.allBooks
+  const books = data?.allBooks;
 
   const genres = useMemo(() => {
-    if (!books) return new Set()
+    if (!books) return new Set();
     const allGenres = books.reduce((acc, book) => {
-      acc.push(...book.genres)
-      return acc
-    }, [])
-    const uniqueGenres = new Set(allGenres)
+      acc.push(...book.genres);
+      return acc;
+    }, []);
+    const uniqueGenres = new Set(allGenres);
 
-    console.log(uniqueGenres)
+    console.log(uniqueGenres);
 
-    return Array.from(uniqueGenres)
-  }, [books])
+    return Array.from(uniqueGenres);
+  }, [books]);
 
-  if (loading) return <div>loading...</div>
+  if (loading) return <div>loading...</div>;
 
-  let filteredBooks = books
+  let filteredBooks = books;
   if (selectedGenre) {
-    filteredBooks = books.filter((b) => b.genres.includes(selectedGenre))
+    filteredBooks = books.filter((b) => b.genres.includes(selectedGenre));
   }
 
   return (
     <div>
       <h2>books</h2>
 
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {filteredBooks.map((a) => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <BookList books={filteredBooks} />
+
       <div>
         <h3>genres: </h3>
         {genres.map((genre) => (
@@ -73,15 +60,7 @@ const BookList = () => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-const Books = (props) => {
-  if (!props.show) {
-    return null
-  }
-
-  return <BookList />
-}
-
-export default Books
+export default Books;
