@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema({
   username: {
@@ -8,16 +8,16 @@ const userSchema = new Schema({
   },
   favouriteGenre: { type: String, required: true },
   password: { type: String, required: true },
-})
+});
 
 userSchema.set("toJSON", {
   transform: function (_doc, returned) {
-    returned.id = returned._id
+    returned.id = returned._id.toString();
 
-    delete returned._id
-    delete returned.__v
-    delete returned.password
+    delete returned._id;
+    delete returned.__v;
+    delete returned.password;
   },
-})
+});
 
-module.exports = model("User", userSchema, "users")
+module.exports = model("User", userSchema, "users");

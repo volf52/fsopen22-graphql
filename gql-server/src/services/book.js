@@ -1,34 +1,39 @@
-const Book = require("../models/book")
+const Book = require("../models/book");
 
 const getAll = async () => {
-  return await Book.find({}).populate("author")
-}
+  return await Book.find({}).populate("author");
+};
 
 const getFiltered = async (filters) => {
-  let f = {}
+  let f = {};
 
   if (filters.author) {
-    f.author = filters.author
+    f.author = filters.author;
   }
 
   if (filters.genre) {
-    f.genres = { $in: [filters.genre] }
+    f.genres = { $in: [filters.genre] };
   }
 
-  return await Book.find(f).populate("author")
-}
+  return await Book.find(f).populate("author");
+};
 
 const getCount = async () => {
-  return await Book.count()
-}
+  return await Book.count();
+};
 
 const getAuthorBookCount = async (authorId) => {
-  return await Book.count({ author: authorId })
-}
+  return await Book.count({ author: authorId });
+};
 
 const create = async (book) => {
-  return await Book.create(book)
-}
+  const b = new Book(book);
+
+  await b.save();
+  await b.populate("author");
+
+  return b;
+};
 
 const bookService = {
   getAll,
@@ -36,6 +41,6 @@ const bookService = {
   create,
   getFiltered,
   getAuthorBookCount,
-}
+};
 
-module.exports = bookService
+module.exports = bookService;

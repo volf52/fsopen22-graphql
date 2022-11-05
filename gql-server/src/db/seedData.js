@@ -69,6 +69,6 @@ const authors = [
       },
     ],
   },
-]
+];
 
-module.exports = { authors }
+module.exports = { authors };

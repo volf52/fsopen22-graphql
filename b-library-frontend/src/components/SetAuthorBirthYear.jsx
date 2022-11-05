@@ -1,27 +1,41 @@
-import { useMutation } from "@apollo/client"
-import { useState } from "react"
-import { ALL_AUTHORS, SET_BIRTH_YEAR } from "../queries"
+import { useMutation } from "@apollo/client";
+import { useState } from "react";
+import { ALL_AUTHORS, SET_BIRTH_YEAR } from "../queries";
 
 const SetAuthorBirthYear = ({ onSuccess, author, onCancel }) => {
-  const [birthYear, setBirthYear] = useState(author.born)
+  const [birthYear, setBirthYear] = useState(author.born || "");
 
   const [editAuthor] = useMutation(SET_BIRTH_YEAR, {
-    refetchQueries: [{ query: ALL_AUTHORS }],
-  })
+    update: (cache, resp) => {
+      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
+        const author = resp.data.editAuthor;
+        const authorsCopy = [...allAuthors];
+
+        const aIdx = authorsCopy.find((a) => a.id === author.id);
+        if (aIdx === -1) return;
+
+        authorsCopy[aIdx] = { ...authorsCopy[aIdx], ...author };
+
+        return {
+          allAuthors: authorsCopy,
+        };
+      });
+    },
+  });
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const variables = { name: author.name, birthYear: Number(birthYear) }
+    const variables = { name: author.name, birthYear: Number(birthYear) };
 
     editAuthor({ variables })
       .then((r) => {
-        onSuccess(r.data.editAuthor)
+        onSuccess(r.data.editAuthor);
       })
-      .catch(console.error)
+      .catch(console.error);
 
-    setBirthYear("")
-  }
+    setBirthYear("");
+  };
 
   return (
     <div>
@@ -60,7 +74,7 @@ const SetAuthorBirthYear = ({ onSuccess, author, onCancel }) => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default SetAuthorBirthYear
+export default SetAuthorBirthYear;

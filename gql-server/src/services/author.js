@@ -1,21 +1,21 @@
-const Author = require("../models/author")
+const Author = require("../models/author");
 
 const getAll = async () => {
-  return await Author.find({})
-}
+  return await Author.find({});
+};
 
 const getCount = async () => {
-  return await Author.count()
-}
+  return await Author.count();
+};
 
 const getByName = async (name) => {
-  return await Author.findOne({ name })
-}
+  return await Author.findOne({ name });
+};
 
 const create = async (author) => {
-  return await Author.create(author)
-}
+  return await Author.create(author);
+};
 
-const authorService = { getAll, getCount, getByName, create }
+const authorService = { getAll, getCount, getByName, create };
 
-module.exports = authorService
+module.exports = authorService;

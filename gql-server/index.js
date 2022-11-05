@@ -91,17 +91,18 @@ const resolvers = {
       }
       const book = { ...args }
 
-      const a = await authorService.getByName(args.author)
+      let a = await authorService.getByName(args.author)
 
-      if (!a) {
-        const addedAuthor = await authorService.create({ name: args.author })
-        book.author = addedAuthor._id
-      } else {
-        book.author = a._id
-      }
+      if (!a) a = await authorService.create({ name: args.author })
+
+      book.author = a._id
 
       try {
         const added = await bookService.create(book)
+
+        a.books.push(added._id)
+        await a.save()
+
         return added
       } catch (err) {
         if (err.name === "ValidationError") {

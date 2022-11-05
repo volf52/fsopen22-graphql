@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model } = require("mongoose");
 
 const bookSchema = new Schema({
   title: {
@@ -15,15 +15,15 @@ const bookSchema = new Schema({
     ref: "Author",
   },
   genres: [{ type: String }],
-})
+});
 
 bookSchema.set("toJSON", {
   transform: function (_doc, returned) {
-    returned.id = returned._id
+    returned.id = returned._id.toString();
 
-    delete returned._id
-    delete returned.__v
+    delete returned._id;
+    delete returned.__v;
   },
-})
+});
 
-module.exports = model("Book", bookSchema, "books")
+module.exports = model("Book", bookSchema, "books");
